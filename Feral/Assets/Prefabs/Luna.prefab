@@ -1311,7 +1311,7 @@ MonoBehaviour:
   anim: {fileID: 5253602683765434643}
   cam: {fileID: 0}
   rb: {fileID: 5253602684253378019}
-  walkSpeed: 4
+  walkSpeed: 8
   runSpeed: 26
   gravity: -20
   velocity: {x: 0, y: 0, z: 0}
