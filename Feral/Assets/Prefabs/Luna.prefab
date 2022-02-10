@@ -1313,11 +1313,12 @@ MonoBehaviour:
   rb: {fileID: 5253602684253378019}
   walkSpeed: 8
   runSpeed: 26
-  gravity: -20
+  gravity: -25
   velocity: {x: 0, y: 0, z: 0}
   jumpHeight: 6
   maxTurnSpeed: 25
   shouldWalk: 1
+  isJumping: 0
 --- !u!114 &5253602682707409754
 MonoBehaviour:
   m_ObjectHideFlags: 0

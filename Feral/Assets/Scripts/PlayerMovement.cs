@@ -6,16 +6,18 @@ public class PlayerMovement : MonoBehaviour
     public Animator anim;
     public Transform cam;
     public Rigidbody rb;
-    public float walkSpeed = 4.0f;
-    public float runSpeed = 12.0f;
+    public float walkSpeed = 8.0f;
+    public float runSpeed = 26.0f;
 
-    public float gravity = -9.81f;
+    public float gravity = -25f;
     public Vector3 velocity;
 
-    public float jumpHeight = 3.0f;
+    public float jumpHeight = 1.5f;
+    public float walkJumpHeight = 3f;
     public float maxTurnSpeed;
 
     public bool shouldWalk = true;
+    public bool isJumping = false;
 
     // Update is called once per frame
     void Update()
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         //Set animation values
         anim.SetFloat("Velocity", direction.magnitude);
         anim.SetBool("ShouldWalk", shouldWalk);
+        anim.SetBool("IsJumping", isJumping);
 
         if (direction.magnitude > 0)
         {
@@ -37,6 +40,10 @@ public class PlayerMovement : MonoBehaviour
         if (controller.isGrounded)
         {
             velocity.y = 0.0f;
+            if (isJumping)
+            {
+                isJumping = false;
+            }
         }
         else
         {
@@ -45,7 +52,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            velocity.y = Mathf.Sqrt(-2.0f * jumpHeight * gravity);
+            isJumping = true;
+            velocity.y = Mathf.Sqrt(-2.0f * (shouldWalk ? walkJumpHeight : jumpHeight) * gravity);
         }
         controller.Move(velocity * Time.deltaTime);
     }
