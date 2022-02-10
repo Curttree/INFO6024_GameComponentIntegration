@@ -19,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
     public bool shouldWalk = true;
     public bool isJumping = false;
 
+    private void Start()
+    {
+        controller.enableOverlapRecovery = true;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -50,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump"))
+        if (!isJumping && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
             velocity.y = Mathf.Sqrt(-2.0f * (shouldWalk ? walkJumpHeight : jumpHeight) * gravity);
