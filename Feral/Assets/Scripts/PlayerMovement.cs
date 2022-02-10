@@ -6,7 +6,8 @@ public class PlayerMovement : MonoBehaviour
     public Animator anim;
     public Transform cam;
     public Rigidbody rb;
-    public float speed = 12.0f;
+    public float walkSpeed = 4.0f;
+    public float runSpeed = 12.0f;
 
     public float gravity = -9.81f;
     public Vector3 velocity;
@@ -14,13 +15,21 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3.0f;
     public float maxTurnSpeed;
 
+    public bool shouldWalk = true;
+
     // Update is called once per frame
     void Update()
     {
+        CheckRun();
+
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(x, 0, z).normalized;
+
+        //Set animation values
         anim.SetFloat("Velocity", direction.magnitude);
+        anim.SetBool("ShouldWalk", shouldWalk);
+
         if (direction.magnitude > 0)
         {
             MoveInDirection(direction);
@@ -56,7 +65,19 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, rotationAmount, 0);
 
             Vector3 moveDir = Quaternion.Euler(0f, rotY, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            controller.Move(moveDir.normalized * (shouldWalk ? walkSpeed : runSpeed) * Time.deltaTime);
+        }
+    }
+
+    private void CheckRun()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            shouldWalk = false;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            shouldWalk = true;
         }
     }
 }
