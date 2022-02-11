@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator anim;
     public Transform cam;
     public Rigidbody rb;
-    public float walkSpeed = 8.0f;
+    public float walkSpeed = 16.0f;
     public float runSpeed = 26.0f;
 
     public float gravity = -25f;
