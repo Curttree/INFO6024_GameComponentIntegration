@@ -755,7 +755,8 @@ MonoBehaviour:
   yawSensitivity: 2
   pitchSensitivity: 2
   playerTransform: {fileID: 1910279510}
-  offset: {x: 0, y: 0, z: 0}
+  cameraHeightOffset: 5
+  cameraDistance: 10
 --- !u!137 &1896586352
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
