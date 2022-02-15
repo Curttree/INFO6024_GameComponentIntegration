@@ -16,8 +16,9 @@ public class PlayerMovement : MonoBehaviour
     public float walkJumpHeight = 3f;
     public float maxTurnSpeed;
 
-    public bool shouldWalk = true;
-    public bool isJumping = false;
+    private bool shouldWalk = true;
+    private bool isJumping = false;
+    private bool isFalling = false;
 
     private void Start()
     {
@@ -36,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("Velocity", direction.magnitude);
         anim.SetBool("ShouldWalk", shouldWalk);
         anim.SetBool("IsJumping", isJumping);
+        anim.SetBool("IsFalling", isFalling);
 
         if (direction.magnitude > 0)
         {
@@ -48,6 +50,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 isJumping = false;
             }
+            if (isFalling)
+            {
+                isFalling = false;
+            }
         }
         else
         {
@@ -58,6 +64,11 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = true;
             velocity.y = Mathf.Sqrt(-2.0f * (shouldWalk ? walkJumpHeight : jumpHeight) * gravity);
+        }
+        if (velocity.y < 0f)
+        {
+            isJumping = false;
+            isFalling = true;
         }
         controller.Move(velocity * Time.deltaTime);
     }
