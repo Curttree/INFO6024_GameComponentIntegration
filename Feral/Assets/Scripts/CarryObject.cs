@@ -28,7 +28,7 @@ public class CarryObject : MonoBehaviour
         {
            Pickup();
         }
-        else if (Input.GetMouseButtonUp(0) && held)
+        else if (Input.GetMouseButtonDown(0) && held)
         {
             Drop();
         }
