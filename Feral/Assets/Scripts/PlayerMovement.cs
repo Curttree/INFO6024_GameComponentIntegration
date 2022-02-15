@@ -65,9 +65,8 @@ public class PlayerMovement : MonoBehaviour
             isJumping = true;
             velocity.y = Mathf.Sqrt(-2.0f * (shouldWalk ? walkJumpHeight : jumpHeight) * gravity);
         }
-        if (velocity.y < 0f)
+        if (isJumping && velocity.y < 0f)
         {
-            isJumping = false;
             isFalling = true;
         }
         controller.Move(velocity * Time.deltaTime);

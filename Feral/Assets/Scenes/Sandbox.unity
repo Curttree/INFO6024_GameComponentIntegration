@@ -1914,6 +1914,7 @@ MonoBehaviour:
   positionCheckOffset: {x: 0, y: 1, z: 0}
   pickupDistance: 10
   heldObjectOffset: {x: 0, y: 3.25, z: 3.75}
+  cameraTransform: {fileID: 1805851818}
 --- !u!1 &1910182268
 GameObject:
   m_ObjectHideFlags: 0
