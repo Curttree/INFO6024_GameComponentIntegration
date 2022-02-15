@@ -17,8 +17,8 @@ public class CameraController : MonoBehaviour
     private float yaw = 0.0f;
     private float pitch = 0.0f;
 
-    private float desiredZoom = 5.0f;
-    private float zoom = 5.0f;
+    private float desiredZoom = 15.0f;
+    private float zoom = 15.0f;
     private float currentZoomSpeed = 0.0f;
     private const float minZoom = 0.5f;
     private const float maxZoom = 25.0f;
@@ -81,7 +81,6 @@ public class CameraController : MonoBehaviour
 
         // Cast a ray from our camera's position to our player's position to see if we've collided with any objects
         RaycastHit hit;
-        bool shouldLerp = false;
 
         Vector3 rayOrigin = playerTransform.position;
         rayOrigin.y += collisionYOffset;
@@ -90,8 +89,6 @@ public class CameraController : MonoBehaviour
         rayDirection.Normalize();
 
         Ray ray = new Ray(rayOrigin, rayDirection);
-
-        Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.green);
 
         if (Physics.Raycast(ray, out hit, rayDistance, layerMask))  // We hit something on the way back, there is something between us and the character
         {
