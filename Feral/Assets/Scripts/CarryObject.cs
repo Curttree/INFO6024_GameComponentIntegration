@@ -22,7 +22,7 @@ public class CarryObject : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetMouseButton(0) && !held)
         {
