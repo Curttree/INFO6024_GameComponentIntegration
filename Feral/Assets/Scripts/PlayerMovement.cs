@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool apexOfJump = false;
     private bool attemptedEdgeCorrection = false;
-    private float climbMaxTime = 2.5f;
+    private float climbMaxTime = 1.0f;
     private float climbTimer = 0f;
 
     private bool onWall = false;
