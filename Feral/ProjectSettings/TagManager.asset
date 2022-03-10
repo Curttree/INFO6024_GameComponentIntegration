@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Object
   - Wall
+  - Sand
   layers:
   - Default
   - TransparentFX

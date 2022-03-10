@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
 
     private bool hasDoubleJump = true;
 
+    public string standingOn;
+
     private void Start()
     {
         controller.enableOverlapRecovery = true;
@@ -184,10 +186,12 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 1.0f))
         {
             isGrounded = true;
+            standingOn = hit.collider.tag;
         }
         else
         {
             isGrounded = false;
+            standingOn = "";
         }
     }
 
