@@ -26,13 +26,14 @@ public class PlayerMovement : MonoBehaviour
 
     private bool apexOfJump = false;
     private bool attemptedEdgeCorrection = false;
-    private float edgeCorrectMaxTime = 0.5f;
-    private float edgeTimer = 0f;
+    private float climbMaxTime = 2.5f;
+    private float climbTimer = 0f;
 
     private bool onWall = false;
+    private GameObject lastWall;
     private bool shouldClimb = true;
-    private float climbMaxTime = 0.1f;
-    private float climbTimer = 0f;
+    private float stickMaxTime = 0.25f;
+    private float stickTimer = 0f;
 
     private bool hasDoubleJump = true;
 
@@ -87,6 +88,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 hasDoubleJump = true;
             }
+            if (lastWall)
+            {
+                lastWall = null;
+            }
         }
         else
         {
@@ -101,8 +106,8 @@ public class PlayerMovement : MonoBehaviour
         {
             //TODO: Check to see if still touching the wall (if walljump timer is large enough)
 
-            climbTimer += Time.deltaTime;
-            if (climbTimer >= climbMaxTime)
+            stickTimer += Time.deltaTime;
+            if (stickTimer >= stickMaxTime)
             {
                 onWall = false;
                 gravity = -25f;
@@ -120,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
             isJumping = true;
             shouldClimb = true;
             hasDoubleJump = false;
-            edgeTimer = 0f;
+            climbTimer = 0f;
             velocity.y = Mathf.Sqrt(-2.0f * (shouldWalk ? walkJumpHeight : jumpHeight) * gravity * 0.25f);
         }
         if (isJumping && velocity.y < 0f)
@@ -155,13 +160,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (hit.gameObject.tag == "Wall")
         {
-            hasDoubleJump = true;
+            if (hit.gameObject != lastWall)
+            {
+                hasDoubleJump = true;
+            }
             isJumping = false;
             isFalling = false;
             onWall = true;
             gravity = -10f;
             // Zero out for now, eventually check if they have the jump button held and therefore should climb
             velocity = Vector3.zero;
+            lastWall = hit.gameObject;
         }
     }
 
@@ -215,10 +224,10 @@ public class PlayerMovement : MonoBehaviour
         while (apexOfJump)
         {
             CheckGround();
-            edgeTimer += 0.01f;
+            climbTimer += 0.01f;
             if (!attemptedEdgeCorrection && (transform.position - previousPosition).magnitude > 0.01f || (attemptedEdgeCorrection && isGrounded))
             {
-                edgeTimer = 0f;
+                climbTimer = 0f;
                 apexOfJump = false;
                 StopCoroutine(Unstick());
             }
@@ -228,7 +237,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     attemptedEdgeCorrection = true;
                 }
-                if (edgeTimer <= edgeCorrectMaxTime && shouldClimb)
+                if (climbTimer <= climbMaxTime && shouldClimb)
                 {
                     //They could just be trying to climb up the edge of a platform. Help them up.
                     transform.position += transform.forward * 0.1f;
