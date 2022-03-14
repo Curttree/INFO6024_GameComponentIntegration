@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         controller.Move(velocity * Time.deltaTime);
-        
+        velocity = Vector3.Scale(velocity, new Vector3(0.95f, 1.0f, 0.95f));
     }
 
     public void MoveInDirection(Vector3 direction)
@@ -171,6 +171,12 @@ public class PlayerMovement : MonoBehaviour
             // Zero out for now, eventually check if they have the jump button held and therefore should climb
             velocity = Vector3.zero;
             lastWall = hit.gameObject;
+        }
+        else if(hit.gameObject.tag == "Bouncy" && velocity.y < 0.0f)
+        {
+            Debug.Log("Bouncy");
+            float bounceForce = 50.0f + Mathf.Abs(velocity.y);
+            velocity = velocity + Vector3.Scale(hit.normal, new Vector3(bounceForce, bounceForce, bounceForce));
         }
     }
 
