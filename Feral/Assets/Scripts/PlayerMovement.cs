@@ -20,9 +20,9 @@ public class PlayerMovement : MonoBehaviour
     public float maxTurnSpeed;
 
     private bool shouldWalk = true;
-    private bool isJumping = false;
+    private bool isJumping = true;
     private bool isFalling = false;
-    public bool isGrounded = true;
+    public bool isGrounded = false;
 
     private bool apexOfJump = false;
     private bool attemptedEdgeCorrection = false;
