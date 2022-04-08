@@ -35,6 +35,8 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        if (PauseMenu.isPaused) return;
+
         Rotate();
         Zoom();
 
