@@ -15,6 +15,8 @@ public class CarryObject : MonoBehaviour
     const float INITAL_THROW_FORCE = 200.0f;
     const float MAX_THROW_FORCE = 2000.0f;
 
+    private GameObject outlinedObject = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,8 @@ public class CarryObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        TryHighlightMesh();
+
         if (Input.GetMouseButton(0) && !held)
         {
            Pickup();
@@ -120,5 +124,44 @@ public class CarryObject : MonoBehaviour
         held = null;
         throwingForce = INITAL_THROW_FORCE;
         throwing = false;
+    }
+
+    private void TryHighlightMesh()
+    {
+        Ray ray = new Ray(transform.position + positionCheckOffset, transform.forward);
+        Debug.DrawRay(transform.position + positionCheckOffset, transform.forward * pickupDistance, Color.red);
+        RaycastHit hit;
+
+        GameObject hitObject = null;
+
+        if (Physics.Raycast(ray, out hit, pickupDistance)) // We hit something
+        {
+            if (hit.collider.gameObject.CompareTag("Object"))
+            {
+                hitObject = hit.collider.gameObject;
+
+                var outline = hitObject.GetComponent<Outline>(); // Add outline component to the object
+                if(outline == null)
+                {
+                    outline = hitObject.AddComponent<Outline>();
+                }
+
+                outline.enabled = true;
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.green;
+                outline.OutlineWidth = 4.0f;
+            }
+        }
+
+        if(hitObject == null && outlinedObject != null) // No longer looking at anything
+        {
+            outlinedObject.GetComponent<Outline>().enabled = false;
+        }
+        else if(outlinedObject != null && hitObject != outlinedObject) // We hit a new object, remove outline from current
+        {
+            outlinedObject.GetComponent<Outline>().enabled = false;
+        }
+
+        outlinedObject = hitObject;
     }
 }
