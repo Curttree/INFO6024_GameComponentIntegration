@@ -33,27 +33,30 @@ public class CarryObject : MonoBehaviour
     {
         TryHighlightMesh();
 
-        if (Input.GetMouseButton(0) && !held)
+        if (!PauseMenu.isPaused)
         {
-           Pickup();
-        }
-        else if (Input.GetMouseButtonDown(0) && held)
-        {
-            Drop();
-        }
-        else if(Input.GetMouseButton(1) && held)
-        {
-            throwing = true;
-        } 
-        else if(throwing && Input.GetMouseButtonUp(1) && held)
-        {
-            Throw();
-        }
+            if (Input.GetMouseButton(0) && !held)
+            {
+                Pickup();
+            }
+            else if (Input.GetMouseButtonDown(0) && held)
+            {
+                Drop();
+            }
+            else if (Input.GetMouseButton(1) && held)
+            {
+                throwing = true;
+            }
+            else if (throwing && Input.GetMouseButtonUp(1) && held)
+            {
+                Throw();
+            }
 
-        if (throwing)
-        {
-            throwingForce *= Mathf.Pow(3.0f, Time.deltaTime);
-            throwingForce = Mathf.Clamp(throwingForce, INITAL_THROW_FORCE, MAX_THROW_FORCE);
+            if (throwing)
+            {
+                throwingForce *= Mathf.Pow(3.0f, Time.deltaTime);
+                throwingForce = Mathf.Clamp(throwingForce, INITAL_THROW_FORCE, MAX_THROW_FORCE);
+            }
         }
     }
 
