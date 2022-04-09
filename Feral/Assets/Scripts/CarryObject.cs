@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CarryObject : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class CarryObject : MonoBehaviour
     const float MAX_THROW_FORCE = 2000.0f;
 
     private GameObject outlinedObject = null;
+
+    public Text interactText;
+
+    private const int layerMask = ~(1 << 2); // Ignore all gameobjects that have layer mask 2
 
     // Start is called before the first frame update
     void Start()
@@ -134,34 +139,51 @@ public class CarryObject : MonoBehaviour
 
         GameObject hitObject = null;
 
-        if (Physics.Raycast(ray, out hit, pickupDistance)) // We hit something
+        if (Physics.Raycast(ray, out hit, pickupDistance, layerMask)) // We hit something
         {
             if (hit.collider.gameObject.CompareTag("Object"))
             {
                 hitObject = hit.collider.gameObject;
-
-                var outline = hitObject.GetComponent<Outline>(); // Add outline component to the object
-                if(outline == null)
-                {
-                    outline = hitObject.AddComponent<Outline>();
-                }
-
-                outline.enabled = true;
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.green;
-                outline.OutlineWidth = 4.0f;
+                OnLookAtInteractable(hitObject);
             }
         }
 
-        if(hitObject == null && outlinedObject != null) // No longer looking at anything
+        bool hitNothing = hitObject == null && outlinedObject != null;
+        if (hitNothing) // No longer looking at anything
         {
-            outlinedObject.GetComponent<Outline>().enabled = false;
+            OnUnlookInteractable(outlinedObject);
         }
-        else if(outlinedObject != null && hitObject != outlinedObject) // We hit a new object, remove outline from current
+
+        if(outlinedObject != null && hitObject != outlinedObject) // We are now looking at a different interactable, set the old interactable to not be glowing
         {
             outlinedObject.GetComponent<Outline>().enabled = false;
         }
 
         outlinedObject = hitObject;
+    }
+
+    private void OnLookAtInteractable(GameObject obj)
+    {
+        var outline = obj.GetComponent<Outline>(); // Add outline component to the object
+        if (outline == null)
+        {
+            outline = obj.AddComponent<Outline>();
+        }
+
+        if (!outline.enabled)
+        {
+            outline.enabled = true;
+            outline.OutlineMode = Outline.Mode.OutlineAll;
+            outline.OutlineColor = Color.green;
+            outline.OutlineWidth = 4.0f;
+        }
+
+        interactText.text = "Press LMB to pickup";
+    }
+
+    private void OnUnlookInteractable(GameObject obj)
+    {
+        obj.GetComponent<Outline>().enabled = false;
+        interactText.text = "";
     }
 }
