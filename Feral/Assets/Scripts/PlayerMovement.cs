@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     public bool isGrounded = false;
 
     private bool apexOfJump = false;
+    public bool alreadyAtApex = false;
+    public bool bonked = false;
     private bool attemptedEdgeCorrection = false;
     public float climbMaxTime = 3.0f;
     public float climbTimer = 0f;
@@ -91,6 +93,14 @@ public class PlayerMovement : MonoBehaviour
             if (lastWall)
             {
                 lastWall = null;
+            }
+            if (alreadyAtApex)
+            {
+                alreadyAtApex = false;
+            }
+            if (bonked)
+            {
+                bonked = false;
             }
         }
         else
@@ -163,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 hasDoubleJump = true;
             }
-
+            bonked = true;
             isJumping = false;
             isFalling = false;
             onWall = true;
@@ -218,7 +228,7 @@ public class PlayerMovement : MonoBehaviour
             //Coroutine has already been triggered. Let it handle the cleanup.
             return;
         }
-        if (!isGrounded && (transform.position - previousPosition).magnitude < 0.01f)
+        if (bonked && !isGrounded && (transform.position - previousPosition).magnitude < 0.01f && !alreadyAtApex)
         {
             apexOfJump = true;
             StartCoroutine(Unstick());
@@ -235,6 +245,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 climbTimer = 0f;
                 apexOfJump = false;
+                alreadyAtApex = true;
                 StopCoroutine(Unstick());
             }
             else
