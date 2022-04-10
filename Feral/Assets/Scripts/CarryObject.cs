@@ -31,8 +31,6 @@ public class CarryObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TryHighlightMesh();
-
         if (!PauseMenu.isPaused)
         {
             if (Input.GetMouseButton(0) && !held)
@@ -66,6 +64,8 @@ public class CarryObject : MonoBehaviour
         {
             held.transform.position = gameObject.transform.position +  (transform.right * heldObjectOffset.x) + (transform.up * heldObjectOffset.y) + (transform.forward * heldObjectOffset.z);
         }
+
+        TryHighlightMesh();
     }
 
     void Pickup()
