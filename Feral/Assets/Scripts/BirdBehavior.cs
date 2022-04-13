@@ -28,6 +28,6 @@ public class BirdBehavior : MonoBehaviour
     public void Fly()
     {
         mesh.mesh = flight;
-        transform.position += new Vector3(0f, 0.15f, 0f) + transform.forward * 0.05f;
+        transform.position += (new Vector3(0f, 25f, 0f) + transform.forward * 10f) * Time.deltaTime;
     }
 }
